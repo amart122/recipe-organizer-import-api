@@ -33,13 +33,13 @@ class RecipeOrganizerImporter:
       "name": scraper.title(),
       "ingredients": formatted_ingredient,
       "instructions": scraper.instructions().split("\n"),
-      "prepTime": scraper.total_time(),
+      "preptime": scraper.total_time(),
       "servingSize": scraper.yields(),
       "notes": "",
       "description": scraper.title(),
     }
 
-    return [formatted_recipe, new_ingredients]
+    return {"recipe": formatted_recipe, "new_ingredients": new_ingredients}
 
   def format_ingredients(self, ingredients):
     formatted_ingredients = []
