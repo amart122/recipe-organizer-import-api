@@ -7,8 +7,13 @@ api_blueprint = Blueprint('api', __name__)
 def import_recipe():
   url = request.args.get('url')
   if not url:
-    return jsonify({"error": "URL is required"}), 403
+    response = jsonify({"error": "URL is required"})
+    response.status_code = 400
+    response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+    return response
   
-  # IMPORT RECIPE
   recipe = RecipeOrganizerImporter().scrape_recipe(url)
-  return jsonify(recipe)
+  response = jsonify(recipe)
+  response.status_code = 200
+  response.headers.add("Access-Control-Allow-Origin", "http://localhost:5173")
+  return response
