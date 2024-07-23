@@ -12,6 +12,9 @@ def create_app():
   db.init_app(app)
   migrate = Migrate(app, db)
 
+  from .api.models import Recipe
+  from .api.models import Ingredient
+
   from .api.routes import api_blueprint
   from .api.ingredients import ingredients_blueprint
   app.register_blueprint(api_blueprint, url_prefix='/api')
