@@ -1,7 +1,9 @@
+import firebase_admin
 from flask import Flask
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from firebase_admin import credentials
 
 db = SQLAlchemy()
 
@@ -11,6 +13,9 @@ def create_app():
   
   db.init_app(app)
   migrate = Migrate(app, db)
+
+  cred = credentials.Certificate(app.config['FIREBASE_CREDENTIALS'])
+  firebase_app = firebase_admin.initialize_app(cred)
 
   from .api.users import User
   from .api.recipes import Recipe
