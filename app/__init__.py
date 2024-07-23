@@ -12,6 +12,7 @@ def create_app():
   db.init_app(app)
   migrate = Migrate(app, db)
 
+  from .api.users import User
   from .api.recipes import Recipe
   from .api.ingredients import Ingredient
 
