@@ -2,5 +2,6 @@
 __pycache__/
 .venv/
 .flaskenv
+.env
 .DS_Store
 Thumbs.db
