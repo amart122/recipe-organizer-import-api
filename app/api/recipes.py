@@ -2,8 +2,9 @@ from flask import Blueprint, jsonify, request
 from app import db
 from flask import current_app
 from sqlalchemy.dialects.postgresql import ARRAY
+from middleware import firebase_login
 
-ingredients_blueprint = Blueprint('recipes', __name__)
+recipes_blueprint = Blueprint('recipes', __name__)
 
 class Recipe(db.Model):
   __tablename__ = 'recipes'
@@ -20,3 +21,9 @@ class Recipe(db.Model):
 
   def __repr__(self):
     return f'<Recipe {self.name}-{self.localId}>'
+
+@recipes_blueprint.route('/recipes', methods=['GET'])
+@firebase_login
+def get_recipes(user):
+  recipes = Recipe.query.filter_by(user_id=user.id).all()
+  return jsonify([recipe.name for recipe in recipes])
