@@ -1,10 +1,9 @@
 import firebase_admin
-from flask import Flask
+from flask import Flask, request
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from firebase_admin import credentials
-
 db = SQLAlchemy()
 
 def create_app():
@@ -27,5 +26,14 @@ def create_app():
   from .api.ingredients import ingredients_blueprint
   app.register_blueprint(api_blueprint, url_prefix='/api')
   app.register_blueprint(ingredients_blueprint, url_prefix='/api/storage')
+
+  @app.after_request
+  def add_cors_header(response):
+    response.headers.add("Access-Control-Allow-Origin", app.config['ALLOWED_HOSTS'])
+
+    if(request.method == 'OPTIONS'):
+      response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+      response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    return response
 
   return app
