@@ -16,6 +16,7 @@ class Recipe(db.Model):
   notes = db.Column(db.String(256))
   description = db.Column(db.String(256))
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+  ingredients = db.relationship('Ingredient', secondary='recipe_ingredients', backref='recipes')
 
   def __repr__(self):
     return f'<Recipe {self.name}-{self.localId}>'

@@ -17,9 +17,11 @@ def create_app():
   cred = credentials.Certificate(app.config['FIREBASE_CREDENTIALS'])
   firebase_app = firebase_admin.initialize_app(cred)
 
+  # Models
   from .api.users import User
   from .api.recipes import Recipe
   from .api.ingredients import Ingredient
+  from .api.recipe_ingredients import RecipeIngredients
 
   from .api.routes import api_blueprint
   from .api.ingredients import ingredients_blueprint

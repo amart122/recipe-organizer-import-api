@@ -5,8 +5,6 @@ from app.api.users import User
 from functools import wraps
 from app import db
 
-import pdb
-
 def firebase_login(f):
   @wraps(f)
 
