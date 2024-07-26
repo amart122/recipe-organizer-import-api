@@ -24,8 +24,10 @@ def create_app():
 
   from .api.routes import api_blueprint
   from .api.ingredients import ingredients_blueprint
+  from .api.recipes import recipes_blueprint
   app.register_blueprint(api_blueprint, url_prefix='/api')
   app.register_blueprint(ingredients_blueprint, url_prefix='/api/storage')
+  app.register_blueprint(recipes_blueprint, url_prefix='/api/storage')
 
   @app.after_request
   def add_cors_header(response):
