@@ -19,3 +19,13 @@ class Ingredient(db.Model):
 def get_ingredients(user):
   ingredients = Ingredient.query.filter_by(user_id=user.id).all()
   return jsonify([ingredient.name for ingredient in ingredients])
+
+@ingredients_blueprint.route('/ingredients', methods=['POST'])
+@firebase_login
+def add_ingredient(user):
+  data = request.get_json()
+  for ingredient in data:
+    new_ingredient = Ingredient(name=ingredient['name'], local_id=ingredient['local_id'], user_id=user.id)
+    db.session.add(new_ingredient)
+  db.session.commit()
+  return jsonify({'message': 'Ingredient added successfully'})
