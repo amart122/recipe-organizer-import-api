@@ -11,4 +11,4 @@ class Ingredient(db.Model):
   name = db.Column(db.String(64), index=True, unique=True)
 
   def __repr__(self):
-    return f'<Ingredient {self.name}-{self.localId}>'
+    return f'<Ingredient {self.name}-{self.local_id}>'
