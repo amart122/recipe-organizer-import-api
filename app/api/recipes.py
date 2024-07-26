@@ -3,6 +3,7 @@ from app import db
 from flask import current_app
 from sqlalchemy.dialects.postgresql import ARRAY
 from middleware import firebase_login
+from .ingredients import Ingredient
 
 recipes_blueprint = Blueprint('recipes', __name__)
 
@@ -26,4 +27,40 @@ class Recipe(db.Model):
 @firebase_login
 def get_recipes(user):
   recipes = Recipe.query.filter_by(user_id=user.id).all()
-  return jsonify([recipe.name for recipe in recipes])
+  return jsonify([{
+      "name": recipe.name,
+      "id": int(recipe.local_id),
+      "description": recipe.description,
+      "preptime": recipe.prep_time,
+      "servingSize": recipe.serving_size,
+      "instructions": recipe.instructions,
+      "notes": recipe.notes,
+      "ingredients": [{"name": ingredient.name, "id": int(ingredient.local_id)} for ingredient in recipe.ingredients]
+    }
+    for recipe in recipes
+  ])
+
+@recipes_blueprint.route('/recipes', methods=['POST'])
+@firebase_login
+def create_recipes(user):
+  data = request.get_json()
+  for recipe in data:
+    new_recipe = Recipe(
+      name=recipe['name'],
+      local_id=recipe['id'],
+      prep_time=recipe['preptime'],
+      serving_size=recipe['servingSize'],
+      instructions=recipe['instructions'],
+      notes=recipe['notes'],
+      description=recipe['description'],
+      user_id=user.id
+    )
+    db.session.add(new_recipe)
+    db.session.commit()
+
+    for ingredient in recipe['ingredients']:
+      ingredient = Ingredient.query.filter_by(local_id=str(ingredient['id'])).first()
+      new_recipe.ingredients.append(ingredient)
+      db.session.commit()
+
+  return jsonify({'message': 'Recipes created!'})

@@ -18,7 +18,12 @@ class Ingredient(db.Model):
 @firebase_login
 def get_ingredients(user):
   ingredients = Ingredient.query.filter_by(user_id=user.id).all()
-  return jsonify([ingredient.name for ingredient in ingredients])
+  return jsonify([{
+    "name": ingredient.name,
+    "id": int(ingredient.local_id)
+    }
+    for ingredient in ingredients
+  ])
 
 @ingredients_blueprint.route('/ingredients', methods=['POST'])
 @firebase_login
