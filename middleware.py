@@ -25,6 +25,6 @@ def firebase_login(f):
     except firebase_admin.auth.InvalidIdTokenError:
       return jsonify({"error": "Invalid Token"}), 401
 
-    return f(*args, **kwargs)
+    return f(user, *args, **kwargs)
 
   return decorated_function
