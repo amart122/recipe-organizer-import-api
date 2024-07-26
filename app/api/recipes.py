@@ -64,3 +64,11 @@ def create_recipes(user):
       db.session.commit()
 
   return jsonify({'message': 'Recipes created!'})
+
+@recipes_blueprint.route('/recipes/<recipe_id>', methods=['DELETE'])
+@firebase_login
+def delete_recipe(user, recipe_id):
+  recipe = Recipe.query.filter_by(local_id=recipe_id, user_id=user.id).first()
+  db.session.delete(recipe)
+  db.session.commit()
+  return jsonify({'message': 'Recipe deleted!'})
