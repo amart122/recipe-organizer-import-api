@@ -22,7 +22,7 @@ def get_ingredients(user):
 
 @ingredients_blueprint.route('/ingredients', methods=['POST'])
 @firebase_login
-def add_ingredient(user):
+def add_ingredients(user):
   data = request.get_json()
   for ingredient in data:
     new_ingredient = Ingredient(name=ingredient['name'], local_id=ingredient['local_id'], user_id=user.id)
