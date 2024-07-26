@@ -10,7 +10,6 @@ class Recipe(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   local_id = db.Column(db.String(64), index=True, unique=True)
   name = db.Column(db.String(128), index=True, unique=True)
-  ingredients = db.relationship('Ingredient', backref='recipes', lazy='dynamic')
   prep_time = db.Column(db.String(64))
   serving_size = db.Column(db.String(64))
   instructions = db.Column(ARRAY(db.String(256)))
