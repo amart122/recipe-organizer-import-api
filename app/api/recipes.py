@@ -4,6 +4,7 @@ from flask import current_app
 from sqlalchemy.dialects.postgresql import ARRAY
 from middleware import firebase_login
 from .ingredients import Ingredient
+from .recipe_ingredients import RecipeIngredients
 
 recipes_blueprint = Blueprint('recipes', __name__)
 
@@ -56,12 +57,22 @@ def create_recipes(user):
       user_id=user.id
     )
     db.session.add(new_recipe)
-    db.session.commit()
 
-    for ingredient in recipe['ingredients']:
-      ingredient = Ingredient.query.filter_by(local_id=str(ingredient['id'])).first()
-      new_recipe.ingredients.append(ingredient)
-      db.session.commit()
+    for new_ingredient in recipe['ingredients']:
+      ingredient = Ingredient.query.filter_by(local_id=str(new_ingredient['id'])).first()
+      if not ingredient:
+        pass
+
+      recipe_ingredient = RecipeIngredients.query.get((new_recipe.id, ingredient.id))
+      if recipe_ingredient:
+        new_meta = recipe_ingredient.meta
+        new_meta['meta'].append((new_ingredient['quantity'], new_ingredient['unit']))
+        recipe_ingredient.meta = new_meta
+      else:
+        recipe_ingredient = RecipeIngredients(recipe_id=new_recipe.id, ingredient_id=ingredient.id, meta={'meta': [(new_ingredient['quantity'], new_ingredient['unit'])]})
+        db.session.add(recipe_ingredient)
+
+    db.session.commit()
 
   return jsonify({'message': 'Recipes created!'})
 
