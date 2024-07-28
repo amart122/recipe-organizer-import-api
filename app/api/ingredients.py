@@ -12,7 +12,7 @@ class Ingredient(db.Model):
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
   def __repr__(self):
-    return f'<Ingredient {self.name}-{self.localId}>'
+    return f'<Ingredient {self.name}-{self.local_id}>'
 
 @ingredients_blueprint.route('/ingredients', methods=['GET'])
 @firebase_login

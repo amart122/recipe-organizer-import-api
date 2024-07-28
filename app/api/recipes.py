@@ -22,7 +22,7 @@ class Recipe(db.Model):
   ingredients = db.relationship('Ingredient', secondary='recipe_ingredients', backref='recipes')
 
   def __repr__(self):
-    return f'<Recipe {self.name}-{self.localId}>'
+    return f'<Recipe {self.name}-{self.local_id}>'
 
 @recipes_blueprint.route('/recipes', methods=['GET'])
 @firebase_login
