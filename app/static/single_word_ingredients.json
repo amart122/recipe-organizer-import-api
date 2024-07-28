@@ -21,6 +21,8 @@
   "carrot": "carrots",
   "cashews": "cashews",
   "cashew": "cashews",
+  "cauliflower": "cauliflowers",
+  "cauliflowers": "cauliflowers",
   "celeriac": "celeriac",
   "celery": "celery",
   "challots": "challots",
@@ -40,6 +42,7 @@
   "cream": "cream",
   "cucumber": "cucumber",
   "cumin": "cumin",
+  "dijon": "dijon",
   "dill": "dill",
   "eggs": "eggs",
   "farfalle": "farfalle",
@@ -249,5 +252,7 @@
   "ciabatta": "ciabatta",
   "buckwheat": "buckwheat",
   "prunes": "prunes",
-  "prune": "prunes"
+  "prune": "prunes",
+  "vodka": "vodka",
+  "penne": "penne"
 }
