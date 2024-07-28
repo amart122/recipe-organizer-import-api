@@ -46,6 +46,10 @@ def get_recipes(user):
 def create_recipes(user):
   data = request.get_json()
   for recipe in data:
+    _recipe = Recipe.query.filter_by(local_id=str(recipe['id']), user_id=user.id).first()
+    if _recipe:
+      continue
+
     new_recipe = Recipe(
       name=recipe['name'],
       local_id=recipe['id'],
@@ -57,12 +61,13 @@ def create_recipes(user):
       user_id=user.id
     )
     db.session.add(new_recipe)
+    db.session.commit()
 
     for new_ingredient in recipe['ingredients']:
       ingredient = Ingredient.query.filter_by(local_id=str(new_ingredient['id'])).first()
       if not ingredient:
-        pass
-
+        continue
+      
       recipe_ingredient = RecipeIngredients.query.get((new_recipe.id, ingredient.id))
       if recipe_ingredient:
         new_meta = recipe_ingredient.meta
@@ -71,8 +76,8 @@ def create_recipes(user):
       else:
         recipe_ingredient = RecipeIngredients(recipe_id=new_recipe.id, ingredient_id=ingredient.id, meta={'meta': [(new_ingredient['quantity'], new_ingredient['unit'])]})
         db.session.add(recipe_ingredient)
-
-    db.session.commit()
+      
+      db.session.commit()
 
   return jsonify({'message': 'Recipes created!'})
 
