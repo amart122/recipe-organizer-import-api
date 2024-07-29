@@ -3,26 +3,11 @@ from app import db
 from flask import current_app
 from sqlalchemy.dialects.postgresql import ARRAY
 from middleware import firebase_login
-from .ingredients import Ingredient
-from .recipe_ingredients import RecipeIngredients
+from app.api.models.recipe import Recipe
+from app.api.models.ingredient import Ingredient
+from app.api.models.recipe_ingredient import RecipeIngredient
 
 recipes_blueprint = Blueprint('recipes', __name__)
-
-class Recipe(db.Model):
-  __tablename__ = 'recipes'
-  id = db.Column(db.Integer, primary_key=True)
-  local_id = db.Column(db.String(64), index=True, unique=True)
-  name = db.Column(db.String(128), index=True, unique=True)
-  prep_time = db.Column(db.String(64))
-  serving_size = db.Column(db.String(64))
-  instructions = db.Column(ARRAY(db.String(256)))
-  notes = db.Column(db.String(256))
-  description = db.Column(db.String(256))
-  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-  ingredients = db.relationship('Ingredient', secondary='recipe_ingredients', backref='recipes')
-
-  def __repr__(self):
-    return f'<Recipe {self.name}-{self.local_id}>'
 
 @recipes_blueprint.route('/recipes', methods=['GET'])
 @firebase_login
@@ -68,13 +53,13 @@ def create_recipes(user):
       if not ingredient:
         continue
       
-      recipe_ingredient = RecipeIngredients.query.get((new_recipe.id, ingredient.id))
+      recipe_ingredient = RecipeIngredient.query.get((new_recipe.id, ingredient.id))
       if recipe_ingredient:
         new_meta = recipe_ingredient.meta
         new_meta['meta'].append((new_ingredient['quantity'], new_ingredient['unit']))
         recipe_ingredient.meta = new_meta
       else:
-        recipe_ingredient = RecipeIngredients(recipe_id=new_recipe.id, ingredient_id=ingredient.id, meta={'meta': [(new_ingredient['quantity'], new_ingredient['unit'])]})
+        recipe_ingredient = RecipeIngredient(recipe_id=new_recipe.id, ingredient_id=ingredient.id, meta={'meta': [(new_ingredient['quantity'], new_ingredient['unit'])]})
         db.session.add(recipe_ingredient)
       
       db.session.commit()

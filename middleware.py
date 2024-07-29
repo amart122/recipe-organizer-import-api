@@ -1,8 +1,8 @@
 import firebase_admin
 from flask import request, jsonify
 from firebase_admin import auth
-from app.api.users import User
 from functools import wraps
+from app.api.models.user import User
 from app import db
 
 def firebase_login(f):

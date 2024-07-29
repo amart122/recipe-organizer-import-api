@@ -17,15 +17,17 @@ def create_app():
   firebase_app = firebase_admin.initialize_app(cred)
 
   # Models
-  from .api.users import User
-  from .api.recipes import Recipe
-  from .api.ingredients import Ingredient
-  from .api.recipe_ingredients import RecipeIngredients
+  from .api.models.user import User
+  from .api.models.ingredient import Ingredient
+  from .api.models.recipe import Recipe
+  from .api.models.recipe_ingredient import RecipeIngredient
 
   from .api.routes import api_blueprint
   from .api.ingredients import ingredients_blueprint
   from .api.recipes import recipes_blueprint
+  from .api.users import users_blueprint
   app.register_blueprint(api_blueprint, url_prefix='/api')
+  app.register_blueprint(users_blueprint, url_prefix='/api')
   app.register_blueprint(ingredients_blueprint, url_prefix='/api/storage')
   app.register_blueprint(recipes_blueprint, url_prefix='/api/storage')
 
@@ -34,7 +36,7 @@ def create_app():
     response.headers.add("Access-Control-Allow-Origin", app.config['ALLOWED_HOSTS'])
 
     if(request.method == 'OPTIONS'):
-      response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+      response.headers.add('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH')
       response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     return response
 
