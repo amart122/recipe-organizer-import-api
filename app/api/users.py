@@ -1,10 +1,23 @@
 from app import db
+from flask import Blueprint, jsonify, request
+from middleware import firebase_login
+from .models.user import User
 
-class User(db.Model):
-  __tablename__ = 'users'
-  id = db.Column(db.Integer, primary_key=True)
-  uid = db.Column(db.String(64), index=True, unique=True, nullable=False)
-  email = db.Column(db.String(64), index=True, unique=True)
+users_blueprint = Blueprint('user', __name__)
 
-  def __repr__(self):
-    return f'<Ingredient {self.uid}>'
+@users_blueprint.route('/user/sync', methods=['GET'])
+@firebase_login
+def get_sync(user):
+  return jsonify({
+    "lastSynced": user.last_synced
+  })
+
+@users_blueprint.route('/user/sync', methods=['PATCH'])
+@firebase_login
+def update_sync(user):
+  data = request.get_json()
+  user.last_synced = data['lastSynced']
+  db.session.commit()
+  return jsonify({
+    "lastSynced": user.last_synced
+  })
