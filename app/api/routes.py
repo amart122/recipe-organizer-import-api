@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from .scraper import RecipeOrganizerImporter
+from flask import current_app as app
 
 api_blueprint = Blueprint('api', __name__)
 
@@ -7,8 +8,11 @@ api_blueprint = Blueprint('api', __name__)
 def import_recipe():
   url = request.args.get('url')
   if not url:
-    return jsonify({"error": "URL is required"}), 403
-  
-  # IMPORT RECIPE
+    response = jsonify({"error": "URL is required"})
+    response.status_code = 400
+    return response
+
   recipe = RecipeOrganizerImporter().scrape_recipe(url)
-  return jsonify(recipe)
+  response = jsonify(recipe)
+  response.status_code = 200
+  return response

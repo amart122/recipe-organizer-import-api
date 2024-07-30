@@ -92,6 +92,7 @@
   "english mustard": "english mustard",
   "extra virgin olive oil": "extra virgin olive oil",
   "fajita seasoning": "fajita seasoning",
+  "ranch seasoning": "ranch seasoning",
   "fennel bulb": "fennel bulb",
   "fennel seeds": "fennel seeds",
   "fennel seed": "fennel seeds",
@@ -137,6 +138,8 @@
   "hard taco shells": "hard taco shells",
   "hard taco shell": "hard taco shells",
   "harissa spice": "harissa spice",
+  "raw pistachios": "raw pistachios",
+  "raw pistachio": "raw pistachios",
   "heavy cream": "heavy cream",
   "hot beef stock": "hot beef stock",
   "ice cream": "ice cream",
@@ -461,5 +464,9 @@
   "powdered sugar": "powdered sugar",
   "polish sausage": "polish sausage",
   "caraway seed": "caraway seed",
-  "sushi rice": "sushi rice"
+  "sushi rice": "sushi rice",
+  "red chile flakes": "red chile flakes",
+  "red chile flake": "red chile flakes",
+  "crème fraîche": "crème fraîche",
+  "mature cheddar": "mature cheddar"
 }
